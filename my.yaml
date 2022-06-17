@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gymapi-deployment
+  labels:
+    app: gymapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gymapi
+  template:
+    metadata:
+      labels:
+        app: gymapi 
+    spec:
+      containers:
+      - name: gymapi
+        image: rafdev0904/gym:32
+        ports:
+        - containerPort: 8081
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+        
+        
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gymapi-svc
+spec:
+  selector:
+    app: gymapi
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8081
+    nodePort: 31112
